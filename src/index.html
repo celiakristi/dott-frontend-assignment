@@ -1,10 +1,132 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta charset="UTF-8" />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <meta charset='UTF-8' />
+    <title>Dog Search | Dott FE assignment</title>
+
+    <!-- Load TensorFlow.js. This is required to use MobileNet. -->
+    <script src='https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.1'></script>
+    <!-- Load the MobileNet model. -->
+    <script src='https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@1.0.0'></script>
+
   </head>
+
   <body>
-    <p>This is the entry point to your app</p>
+    <dog-search-app>
+      <header>
+        <div class='header-wrapper d-flex flx-direction-row '>
+          <div class='d-inline-b'>
+            <image-preview
+              id='uploadedImagePreview'
+              height='100%'
+              width='8em'
+            ></image-preview>
+          </div>
+          <div class='d-inline-b'>
+            <div class='information-box d-flex flx-direction-col justify-content-space-between'>
+              <span class='breed-title'>Breed</span>
+              <span id='breedValue'>-</span>
+              <div>
+                <input
+                  type='file'
+                  id='imageUpload'
+                  accept='image/jpg, image/jpeg, image/png'
+                  style='display: none;'
+                />
+                <label for='imageUpload'
+                  ><a class='button'>Upload a picture</a></label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+  
+      <main>
+        <div
+          class='row'
+        >
+          <gallery-preview id='galleryElement'></gallery-preview>
+        </div>
+      </main>
+  
+      <footer>
+        <div class='float-button-wrapper'>
+          <!-- email to me button -->
+          <div class='d-inline-b'>
+            <a
+              class='button'
+              href='mailto:ck.gunawan@gmail.com'
+              target='_blank'
+              title='Send me email!'
+              >Q?</a
+            >
+          </div>
+          <!-- scroll to the top button -->
+          <div class='d-inline-b float-right'>
+            <a
+              class='button'
+              href='#'
+              id='backToTop'
+              title='Scroll back to top.'
+              >Top</a
+            >
+          </div>
+        </div>
+      </footer>
+      <image-view></image-view>
+    </dog-search-app>
+    <script>
+      const mainApp = document.querySelector('dog-search-app');
+      const imageView = mainApp.querySelector('image-view');
+      const gallery = document.querySelector('#galleryElement');
+
+      const showImageView = function(urlToShow) {
+        if(urlToShow) {
+          imageView.show(urlToShow);
+        }
+      };
+
+      gallery?.addEventListener('click', (event) => {
+        showImageView(event.target.src);
+      });
+
+      document.querySelector('image-preview').addEventListener('click', function(event) {
+        showImageView(showImageView(this.getImageUrl()));
+      });
+
+      document.querySelector('#imageUpload').addEventListener('change', (event) => {
+        const imageUrl = URL.createObjectURL(event.target.files[0]);
+        document
+          .querySelector('#uploadedImagePreview')
+          .updateImage(imageUrl, 'auto', '6em');
+        const img = document
+          .querySelector('#uploadedImagePreview')
+          .getImageEl();
+
+        mobilenet.load().then((model) => {
+          model.classify(img).then((predictions) => {
+            const highestProbability = Math.max.apply(
+              Math,
+              predictions.map((breed) => breed.probability)
+            );
+            const mostlikelyBreed = predictions.find(
+              (prediction) => prediction.probability === highestProbability
+            );
+            mainApp.updateBreedDisplay(mostlikelyBreed.className);
+            gallery.fetchData(mainApp.getUrl()).then(pass => {
+              if(pass) {
+                document.querySelector('#breedValue').textContent = mainApp.getBreedDisplayName();
+              }
+            });
+          });
+        });
+      });
+      
+
+
+      
+    </script>
   </body>
 </html>

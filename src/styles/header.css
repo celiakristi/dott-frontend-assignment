@@ -1,0 +1,12 @@
+.header-wrapper {
+    width: 90%;
+    border-bottom: 2px dotted #f9ca31;
+    margin: 0 auto 15px auto;
+    padding: 10px 0;
+    justify-content: center;
+}
+.information-box {
+    padding: 5px;
+}
+.breed-title { font-size: smaller; }
+#breedValue { font-size: x-large; font-style: italic; }

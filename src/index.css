@@ -1,5 +1,39 @@
-/* Global CSS styles applied to the whole app */
 
+
+/* Global CSS styles applied to the whole app */
 body {
   margin: 0;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #333;
+  background-color: #e6bb1e;
 }
+
+a { text-decoration: none; }
+a:hover { color:white; }
+
+.row {
+  width: 85%;
+  min-width: 300px;
+  margin: 0 auto;
+}
+
+.d-flex { display: flex; }
+.d-inline-b { display: inline-block; }
+.flx-direction-col { flex-direction: column; }
+.flx-direction-row { flex-direction: row; }
+.flx-grow-1 { flex-grow: 1; }
+.flx-grow-2 { flex-grow: 2; }
+.flx-shrink-1 { flex-shrink: 1; }
+.flx-wrap { flex-wrap: wrap; }
+.justify-content-space-between { justify-content: space-between; }
+
+.button {
+  background-color:#333;
+	text-align:center;
+  display: inline-block;
+  font-size: small;
+  vertical-align: middle;
+  color: #ffd025;
+  padding: 1rem;
+}
+.float-right { float: right;}
